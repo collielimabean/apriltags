@@ -54,6 +54,10 @@ static inline uint32_t u64hash_1(uint64_t x) {
 }
 */
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846264338327
+#endif
+
 static inline double terrible_atan2_quadrant0(double y, double x)
 {
     if (x > y)
