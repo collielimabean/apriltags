@@ -367,6 +367,9 @@ matd_t *homography_to_pose(const matd_t *H, double fx, double fy, double cx, dou
 
 matd_t *homography_to_model_view(const matd_t *H, double F, double G, double A, double B, double C, double D)
 {
+    (void) C;
+    (void) D;
+
     // Note that every variable that we compute is proportional to the scale factor of H.
     double R20 = -MATD_EL(H, 2, 0);
     double R21 = -MATD_EL(H, 2, 1);

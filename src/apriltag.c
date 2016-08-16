@@ -38,6 +38,7 @@ either expressed or implied, of the FreeBSD Project.
 #include <stdio.h>
 #include <inttypes.h>
 #include <sys/time.h>
+#include <stdlib.h>
 
 #include "common/image_u8.h"
 #include "common/image_u32.h"
@@ -85,8 +86,8 @@ static uint64_t rotate90(uint64_t w, uint32_t d)
     uint64_t wr = 0;
 
     for (int32_t r = d-1; r >=0; r--) {
-        for (int32_t c = 0; c < d; c++) {
-            int32_t b = r + d*c;
+        for (uint32_t c = 0; c < d; c++) {
+            uint32_t b = r + d*c;
 
             wr = wr << 1;
 
@@ -176,7 +177,7 @@ void quick_decode_init(apriltag_family_t *family, int maxhamming)
     for (int i = 0; i < qd->nentries; i++)
         qd->entries[i].rcode = UINT64_MAX;
 
-    for (int i = 0; i < family->ncodes; i++) {
+    for (unsigned int i = 0; i < family->ncodes; i++) {
         uint64_t code = family->codes[i];
 
         // add exact code (hamming = 0)
@@ -577,12 +578,12 @@ float quad_decode(apriltag_family_t *family, image_u8_t *im, struct quad *quad, 
     float sums[2] = { 0, 0 };
     float counts[2] = { 0, 0 };
 
-    for (int pattern_idx = 0; pattern_idx < sizeof(patterns)/(5*sizeof(float)); pattern_idx ++) {
+    for (unsigned int pattern_idx = 0; pattern_idx < sizeof(patterns)/(5*sizeof(float)); pattern_idx ++) {
         float *pattern = &patterns[pattern_idx * 5];
 
         int sumidx = pattern[4];
 
-        for (int i = 0; i < 2*family->black_border + family->d; i++) {
+        for (unsigned int i = 0; i < 2*family->black_border + family->d; i++) {
             double tagx01 = (pattern[0] + i*pattern[2]) / (2*family->black_border + family->d);
             double tagy01 = (pattern[1] + i*pattern[3]) / (2*family->black_border + family->d);
 
@@ -612,7 +613,7 @@ float quad_decode(apriltag_family_t *family, image_u8_t *im, struct quad *quad, 
     float score = 0;
     float score_count = 0;
 
-    for (int bitidx = 0; bitidx < family->d * family->d; bitidx++) {
+    for (unsigned int bitidx = 0; bitidx < family->d * family->d; bitidx++) {
         int bitx = bitidx % family->d;
         int bity = bitidx / family->d;
 
@@ -653,12 +654,14 @@ float quad_decode(apriltag_family_t *family, image_u8_t *im, struct quad *quad, 
 
 double score_goodness(apriltag_family_t *family, image_u8_t *im, struct quad *quad, void *user)
 {
+    (void)(user);
     return quad_goodness(family, im, quad);
 }
 
 double score_decodability(apriltag_family_t *family, image_u8_t *im, struct quad *quad, void *user)
 {
     struct quick_decode_entry entry;
+    (void)(user);
 
     float decision_margin = quad_decode(family, im, quad, &entry);
 

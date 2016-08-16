@@ -577,7 +577,7 @@ bool str_matches_any(const char *haystack, const char **needles, int num_needles
 char *str_substring(const char *str, size_t startidx, long endidx)
 {
     assert(str != NULL);
-    assert(startidx >= 0 && startidx <= strlen(str)+1);
+    assert(startidx <= strlen(str)+1);
     assert(endidx < 0 || endidx >= startidx);
     assert(endidx < 0 || endidx <= strlen(str)+1);
 

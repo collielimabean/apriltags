@@ -615,6 +615,7 @@ int quad_segment_maxima(apriltag_detector_t *td, zarray_t *cluster, struct line_
 // returns 0 if the cluster looks bad.
 int quad_segment_agg(apriltag_detector_t *td, zarray_t *cluster, struct line_fit_pt *lfps, int indices[4])
 {
+    (void) td;
     int sz = zarray_size(cluster);
 
     zmaxheap_t *heap = zmaxheap_create(sizeof(struct remove_vertex*));
@@ -1136,6 +1137,7 @@ int fit_quad(apriltag_detector_t *td, image_u8_t *im, zarray_t *cluster, struct 
 #define DO_UNIONFIND(dx, dy) if (edgeim->buf[y*s + dy*s + x + dx] == v) unionfind_connect(uf, y*w + x, y*w + dy*w + x + dx);
 static inline void do_unionfind_line(unionfind_t *uf, image_u8_t *edgeim, int h, int w, int s, int y)
 {
+    (void) h;
     assert(y+1 < edgeim->height);
 
     for (int x = 1; x < w - 1; x++) {
